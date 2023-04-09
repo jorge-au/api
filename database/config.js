@@ -4,8 +4,7 @@ const util = require("util");
 const pool = mysql.createPool({
     host: process.env.db__host,
     database: process.env.db__name,
-    user: process.env.db__user,
-    password: process.env.db__pass
+    user: process.env.db__user
 });
 
 pool.getConnection((err) => {

@@ -32,7 +32,7 @@ const editUserById = async(id, user) => {
     try {
         return await pool.query(query, user)
     } catch (error) {
-        return {"error": error.code};
+        return { "error": error.code }
     }
 };
 

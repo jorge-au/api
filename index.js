@@ -18,9 +18,20 @@ server.get("/", (req, res) => {
 server.use("/users", router);
 
 // Catch error 
-server.use("*", (req, res) => {
-	res.status(404).json({message: "Resource not founded"})
-})
+server.use((req, res, next) => {
+	let error = new Error()
+	error.status = 404
+	error.message = "Resource not found"
+	next(error)
+});
+
+// Error handler (manejador de errores)
+server.use((error, req, res, next) => {
+	error.status
+	error.message
+	res.status(error.status).json({status: error.status, message: error.message})
+});
+
 // Runn server
 server.listen(PORT, (err)=>{
 	if(err){

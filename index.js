@@ -27,6 +27,7 @@ server.use((req, res, next) => {
 
 // Error handler (manejador de errores)
 server.use((error, req, res, next) => {
+	if(!error.status) error.status = 500;
 	error.status
 	error.message
 	res.status(error.status).json({status: error.status, message: error.message})

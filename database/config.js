@@ -2,9 +2,9 @@ const mysql = require("mysql2");
 const util = require("util");
 
 const pool = mysql.createPool({
-    host: process.env.db__host,
-    database: process.env.db__name,
-    user: process.env.db__user
+    host: process.env.DB__HOST,
+    database: process.env.DB__NAME,
+    user: process.env.DB__USER
 });
 
 pool.getConnection((err) => {

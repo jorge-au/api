@@ -6,6 +6,7 @@ CREATE TABLE users2 (
 	userName varchar(255),
 	email varchar(255),
 	password varchar(255),
+	image varchar(255)
 	PRIMARY KEY(id)
 );
 

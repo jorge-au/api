@@ -54,17 +54,25 @@ const login = async(req, res, next) => {
 
 // Patch existing user
 const editOne = async(req, res, next) => {
-    if (notNumber(req.params.id, res)) return;
+    if (notNumber(req.params.id, res)){
+        return;
+    }  
     const dbResponse = await editUserById(+req.params.id, req.body);
-    if (dbResponse instanceof Error) return next(dbResponse);
+    if (dbResponse instanceof Error){
+        return next(dbResponse);
+    } 
     dbResponse.affectedRows ? res.status(200).json(req.body) : next()
 };
 
 // Delete user By Id
 const removeOne = async(req, res, next) => {
-    if(notNumber(req.params.id, res)) return 
+    if(notNumber(req.params.id, res)) {
+        return 
+    }
     const dbResponse = await deleteUserById(Number(req.params.id));
-    if(dbResponse instanceof Error) return next(dbResponse);
+    if(dbResponse instanceof Error){
+        return next(dbResponse);
+    } 
     if(dbResponse.affectedRows){
         res.status(204).end()
     } else{

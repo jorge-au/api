@@ -1,7 +1,7 @@
 const pool = require("../database/config");
 
 const getAllUsers = async() => {
-    const query = `SELECT * FROM users2`
+    const query = `SELECT * FROM users`
     try {
         return await pool.query(query)
     } catch (error) {
@@ -11,7 +11,7 @@ const getAllUsers = async() => {
 };
 
 const getUserById = async(id) => {
-    const query = `SELECT * FROM users2 WHERE id = ${id}`
+    const query = `SELECT * FROM users WHERE id = ${id}`
     try {
         return await pool.query(query)
     } catch (error) {
@@ -21,7 +21,7 @@ const getUserById = async(id) => {
 };
 
 const registerUser = async(user) => {
-    const query = `INSERT INTO users2 SET ?`;
+    const query = `INSERT INTO users SET ?`;
     try {
         return await pool.query(query, user);
     } catch (error) {
@@ -31,7 +31,7 @@ const registerUser = async(user) => {
 };
 
 const loginUser = async(email) => {
-    const query = `SELECT * FROM users2 WHERE email = '${email}'`;
+    const query = `SELECT * FROM users WHERE email = '${email}'`;
     try {
         return await pool.query(query, email);
     } catch (error) {
@@ -41,7 +41,7 @@ const loginUser = async(email) => {
 };
 
 const editUserById = async(id, user) => {
-    const query = `UPDATE users2 SET ? WHERE id = ${id}`;
+    const query = `UPDATE users SET ? WHERE id = ${id}`;
     try {
         return await pool.query(query, user)
     } catch (error) {
@@ -51,7 +51,7 @@ const editUserById = async(id, user) => {
 };
 
 const deleteUserById = async(id) => {
-    const query = `DELETE FROM users2 WHERE id = ${id}`;
+    const query = `DELETE FROM users WHERE id = ${id}`;
     try {
         return await pool.query(query)
     } catch (error) {

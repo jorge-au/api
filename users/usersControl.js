@@ -2,14 +2,19 @@
 const {getAllUsers,getUserById, registerUser, loginUser, editUserById, deleteUserById} = require("./usersModel");
 const notNumber = require("../utils/notNumber");
 const {hashPassword, checkPassword} = require("../utils/handlePassword");
+const { tokenSign } = require("../utils/handleJWT");
+const url = process.env.url_base;
 
 // List all users
 const listAll = async(req, res, next) => {
     const dbResponse = await getAllUsers();
     if(dbResponse instanceof Error) {
         return next(dbResponse)
-    } else {
-        res.status(200).json(dbResponse);
+    }
+    if(dbResponse.length){
+        res.status(200).json(dbResponse)
+    } else{
+        next()
     }
 };
 
@@ -27,13 +32,18 @@ const listOne = async(req, res, next) => {
 
 // Register new user
 const register = async(req, res, next) => {
+    const image = url + req.file.filename;
     const password = await hashPassword(req.body.password);
-    const dbResponse = await registerUser({...req.body, password});
-    if(dbResponse instanceof Error) {
-        next(dbResponse);
-    } else {
-        res.status(201).json(`User ${req.body.name} created!`);
+    const dbResponse = await registerUser({...req.body, password, image});//ES6 pasword: password
+    if(dbResponse instanceof Error) return next(dbResponse);
+    const user = {
+        name: req.body.name,
+        email: req.body.email
     }
+    const tokenData = {
+        token: await tokenSign(user, "2h")
+    }
+    res.status(201).json({user: req.body.name, Token_info: tokenData});
 };
 
 // Login user
@@ -43,7 +53,17 @@ const login = async(req, res, next) => {
      return next()
    } 
    if(await checkPassword(req.body.password, dbResponse[0].password)){
-        res.sendStatus(200)
+        const user = {
+            id: dbResponse[0].id,
+            name: dbResponse[0].name,
+            email: dbResponse[0].email,
+            image: dbResponse[0].image
+        }
+        const tokenData = {
+            token: await tokenSign(user, "2h"),
+            user: user
+        }
+        res.status(200).json({message: `user ${user.name} Logged in!`, Token_info: tokenData});
    } else {
     let error = new Error
     error.status = 401

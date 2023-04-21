@@ -3,10 +3,10 @@ require("./database/config");
 const express = require('express');
 const server = express();
 const PORT = process.env.PORT || 3000;
-const router = require("./users/usersRoute.js")
 
 server.use(express.json())
 server.use(express.urlencoded({extended: true}))
+server.use(express.static('public'))
 
 server.get("/", (req, res) => {
 	const content = `
@@ -15,7 +15,11 @@ server.get("/", (req, res) => {
 	res.send(content)
 });
 
-server.use("/users", router);
+// Router for /users endpoint
+server.use("/users", require("./users/usersRoute"));
+
+// Router for /posts endpoint
+server.use("/posts", require("./posts/postsRoute"))
 
 // Catch error 
 server.use((req, res, next) => {

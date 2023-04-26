@@ -15,12 +15,11 @@ const listAll = async(req, res, next)=>{
     }
 };
 
-const addOne = async(req, res, next)=>{
-   const dbResponse = await addNewPost({userid:req.token.id, ...req.body})
-   if(dbResponse instanceof Error) {
-        next(dbResponse)
-    } else {
-        res.status(201).json({message: `Post created by ${req.token.name}`})
-    }
+const addOne = async (req, res, next) => {
+    const dbResponse = await addNewPost({ userid: req.token.id, ...req.body });
+    dbResponse instanceof Error
+      ? next(dbResponse)
+      : res.status(201).json({ message: `Post created by ${req.token.name}` });
 };
+
 module.exports = {listAll, addOne};

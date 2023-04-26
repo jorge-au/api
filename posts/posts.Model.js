@@ -1,6 +1,6 @@
-const pooñ = require("../database/config");
+const pool = require("../database/config");
 
-const getPostsWith = (String) => {
+const getPostsWith = (string) => {
     const query = `SELECT * FROM posts WHERE title LIKE '%${string}%'`
     try {
         return pool.query(query);
@@ -8,9 +8,9 @@ const getPostsWith = (String) => {
         error.message = error.code
         return error;
     }
-}
+};
 
-const getAllPosts = ()=> {
+const getAllPosts = () => {
     const query = `SELECT * FROM posts`
     try {
         return pool.query(query);
@@ -20,13 +20,13 @@ const getAllPosts = ()=> {
     }
 };
 
-const addNewPost = (post)=>{
-    const query = `INSERT INTO posts SET ?`
+const addNewPost = (post) => {
+    const query = "INSERT INTO posts SET ?";
     try {
-        return pool.query(query, post);
+      return pool.query(query, post);
     } catch (error) {
-        error.message = error.code
-        return error;
+      error.message = error.code;
+      return error;
     }
 };
 module.exports = {getPostsWith, getAllPosts, addNewPost};

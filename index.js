@@ -1,12 +1,23 @@
 require("dotenv").config();
 require("./database/config");
-const express = require('express');
-const server = express();
 const PORT = process.env.PORT || 3000;
+const express = require('express');
+const hbs = require("express-handlebars");
+const path = require("path");
+const server = express();
 
-server.use(express.json())
-server.use(express.urlencoded({extended: true}))
-server.use(express.static('public'))
+server.use(express.json());
+server.use(express.urlencoded({extended: true})); //lectura de formularios
+server.use(express.static('public'));
+
+// Bootstrap files via static routes
+server.use("/css", express.static(path.join(__dirname, "node_modules/bootstrap/dist/css")));
+server.use("/js", express.static(path.join(__dirname, "node_modules/bootstrap/dist/js")));
+
+// Handlebars setup
+server.set("view engine", "hbs");
+server.set("views", path.join(__dirname, "views"));
+server.engine("hbs", hbs.engine({extname: "hbs"}));
 
 server.get("/", (req, res) => {
 	const content = `
@@ -31,10 +42,13 @@ server.use((req, res, next) => {
 
 // Error handler (manejador de errores)
 server.use((error, req, res, next) => {
-	if(!error.status) error.status = 500;
-	error.status
-	error.message
-	res.status(error.status).json({status: error.status, message: error.message})
+	if(!error.status){
+		error.status = 500;
+		error.message = "Internal error server"
+	}
+	res
+	.status(error.status)
+	.json({status: error.status, message: error.message})
 });
 
 // Runn server
